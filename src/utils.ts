@@ -42,14 +42,14 @@ export function safeJsonParse(str: string): { [key: string]: any } | string {
 }
 
 export function serializer(
-  replacer: Function = null,
-  cycleReplacer: Function = null
+  replacer: Function | null = null,
+  cycleReplacer: Function | null = null
 ): any {
-  const stack = [];
-  const keys = [];
+  const stack: any[] = [];
+  const keys: string[] = [];
 
-  if (cycleReplacer == null) {
-    cycleReplacer = function(_, value: any) {
+  if (cycleReplacer === null) {
+    cycleReplacer = function(_: any, value: any) {
       if (stack[0] === value) {
         return '[Circular ~]';
       }
@@ -65,7 +65,7 @@ export function serializer(
       const thisPos = stack.indexOf(this);
       ~thisPos ? stack.splice(thisPos + 1) : stack.push(this);
       ~thisPos ? keys.splice(thisPos, Infinity, key) : keys.push(key);
-      if (~stack.indexOf(value)) {
+      if (~stack.indexOf(value) && cycleReplacer !== null) {
         value = cycleReplacer.call(this, key, value);
       }
     } else {
@@ -78,9 +78,9 @@ export function serializer(
 
 export function safeJsonStringify(
   obj: any,
-  replacer: Function = null,
+  replacer: Function | null = null,
   spaces?: number,
-  cycleReplacer: Function = null
+  cycleReplacer: Function | null = null
 ): string {
   return JSON.stringify(obj, serializer(replacer, cycleReplacer), spaces);
 }
