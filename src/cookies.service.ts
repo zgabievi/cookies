@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { CookiesOptions } from './cookies-options';
 import { CookiesOptionsService } from './cookies-options.service';
-import { safeJsonParse } from './utils';
+import { safeJsonParse, safeJsonStringify } from './utils';
 
 @Injectable()
 export class CookiesService {
@@ -17,7 +17,7 @@ export class CookiesService {
   }
 
   putObject(key: string, value: Object, options?: CookiesOptions): void {
-    this.put(key, JSON.stringify(value), options);
+    this.put(key, safeJsonStringify(value), options);
   }
 
   get(key: string): string {
